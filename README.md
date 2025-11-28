@@ -108,6 +108,15 @@ On dark background apps, there will be some ghosting on the screen: use the “H
 
 This client was built in C++ using [libvncserver](https://github.com/LibVNC/libvncserver), which implements the [RFB protocol](https://tools.ietf.org/html/rfc6143) behind the VNC system.
 
+## Building
+
+1) Source your toolchain variables. Example for aarch64 5.2.96: `. /opt/codex/chiappa/5.2.96-dirty/environment-setup-cortexa55-remarkable-linux`
+2) Grab the toolchain CMake file. Example for aarch64 5.2.96: `export CMAKE_FILE=/opt/codex/chiappa/5.2.96-dirty/sysroots/x86_64-codexsdk-linux/usr/share/cmake/cortexa55-remarkable-linux-toolchain.cmake`
+3) `mkdir build`
+4) `cd build`
+5) `cmake -S .. -B . -DCMAKE_TOOLCHAIN_FILE="$CMAKE_FILE" -DCMAKE_BUILD_TYPE=Release -DWITH_SDL=OFF -DWITH_LZO=OFF -DWITH_GTK=OFF -DWITH_OPENSSL=OFF -DWITH_GNUTLS=OFF -DWITH_GCRYPT=OFF`
+6) `cmake --build .`
+
 ## Acknowledgments
 
 Many thanks to:
