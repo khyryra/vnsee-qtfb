@@ -2,10 +2,13 @@
 #define APP_SCREEN_HPP
 
 #include "event_loop.hpp"
+#include "../rmioc/screen.hpp"
 #include <chrono>
 #include <iosfwd>
 #include <rfb/rfbclient.h>
 #include <rfb/rfbproto.h>
+
+namespace chrono = std::chrono;
 
 namespace rmioc
 {
@@ -136,6 +139,14 @@ private:
 
     /** Current repaint mode. */
     repaint_modes repaint_mode;
+
+    chrono::milliseconds standard_repaint_delay;
+
+    chrono::milliseconds fast_repaint_delay;
+
+    rmioc::waveform_modes standard_waveform_mode;
+
+    rmioc::waveform_modes fast_waveform_mode;
 }; // class screen
 
 } // namespace app

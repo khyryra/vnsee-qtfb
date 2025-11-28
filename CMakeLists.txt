@@ -50,12 +50,14 @@ endif()
 
 add_executable(vnsee
     src/app/buttons.cpp
+    src/app/virtualkeyboard.cpp
     src/app/client.cpp
     src/app/pen.cpp
     src/app/screen.cpp
     src/app/touch.cpp
     src/main.cpp
     src/rmioc/buttons.cpp
+    src/rmioc/virtualkeyboard.cpp
     src/rmioc/device.cpp
     src/rmioc/file.cpp
     src/rmioc/input.cpp

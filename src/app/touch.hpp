@@ -13,11 +13,13 @@ namespace rmioc
 namespace app
 {
 
+class screen;
 class touch
 {
 public:
     touch(
         rmioc::touch& device,
+        app::screen& screen,
         const rmioc::screen& screen_device,
         MouseCallback send_button_press
     );
@@ -32,6 +34,9 @@ public:
 private:
     /** reMarkable touchscreen device. */
     rmioc::touch& device;
+
+    /** reMarkable screen. */
+    app::screen& screen;
 
     /** reMarkable screen device. */
     const rmioc::screen& screen_device;
@@ -76,10 +81,10 @@ private:
     int y = 0;
 
     /** Initial X position of the touch interaction, if not inactive. */
-    int x_initial = 0;
+    int x_last = 0;
 
     /** Initial Y position of the touch interaction, if not inactive. */
-    int y_initial = 0;
+    int y_last = 0;
 
     /**
      * Total number of horizontal scroll events that were sent in this

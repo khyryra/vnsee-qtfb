@@ -19,7 +19,7 @@ class pen
 public:
     pen(
         rmioc::pen& device,
-        app::screen& screen_device,
+        app::screen& screen,
         MouseCallback send_button_press
     );
 

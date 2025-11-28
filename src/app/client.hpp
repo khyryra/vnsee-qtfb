@@ -6,6 +6,7 @@
 #include "pen.hpp"
 #include "screen.hpp"
 #include "touch.hpp"
+#include "virtualkeyboard.hpp"
 #include <iosfwd>
 #include <optional>
 #include <poll.h> // IWYU pragma: keep
@@ -59,6 +60,9 @@ private:
     /** Index of the touch file descriptor in the poll structure. */
     std::size_t poll_touch = -1;
 
+    /** Index of the keyboard file descriptor in the poll structure. */
+    std::size_t poll_virtualkeyboard = -1;
+
     /** Index of the VNC socket file descriptor in the poll structure. */
     std::size_t poll_vnc = -1;
 
@@ -70,6 +74,9 @@ private:
 
     /** Event handler for the buttons device. */
     std::optional<buttons> buttons_handler;
+
+    /** Event handler for the keyboard device. */
+    std::optional<virtualkeyboard> virtualkeyboard_handler;
 
     /** Event handler for the pen device. */
     std::optional<pen> pen_handler;
@@ -85,6 +92,13 @@ private:
      * @param button Button to press.
      */
     void send_button_press(int x, int y, MouseButton button);
+
+    /**
+     * Send a virtual key event to the VNC server.
+     *
+     * @param keyCode Key to press.
+     */
+    void send_virtual_key_press(int keyCode, bool down);
 }; // class client
 
 } // namespace app

@@ -1,12 +1,14 @@
 #include "device.hpp"
 #include "screen_mxcfb.hpp"
 #include "screen_rm2fb.hpp"
+#include "virtualkeyboard.hpp"
 #include <fcntl.h>
 #include <fstream>
 #include <filesystem>
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -18,13 +20,15 @@ device::device(
     std::unique_ptr<buttons>&& buttons_device,
     std::unique_ptr<touch>&& touch_device,
     std::unique_ptr<pen>&& pen_device,
-    std::unique_ptr<screen>&& screen_device
+    std::unique_ptr<screen>&& screen_device,
+    std::unique_ptr<virtualkeyboard>&& virtualkeyboard_device
 )
 : type(type)
 , buttons_device(std::move(buttons_device))
 , touch_device(std::move(touch_device))
 , pen_device(std::move(pen_device))
 , screen_device(std::move(screen_device))
+, virtualkeyboard_device(std::move(virtualkeyboard_device))
 {}
 
 auto get_device_type() -> device::types
@@ -103,6 +107,9 @@ auto device::detect(device_request request) -> device
     std::unique_ptr<pen> pen_device;
     std::unique_ptr<screen> screen_device;
 
+    fs::path virtualkeyboard_path = "/dev/input/virtual_keyboard";
+    std::unique_ptr<virtualkeyboard> virtualkeyboard_device = fs::exists(virtualkeyboard_path) ? std::make_unique<virtualkeyboard>("/dev/input/virtual_keyboard") : nullptr;
+
     // Use the appropriate screen driver based on current device type
     if (request.has_screen())
     {
@@ -131,7 +138,8 @@ auto device::detect(device_request request) -> device
         std::move(buttons_device),
         std::move(touch_device),
         std::move(pen_device),
-        std::move(screen_device)
+        std::move(screen_device),
+        std::move(virtualkeyboard_device)
     );
 }
 
@@ -158,6 +166,11 @@ auto device::get_pen() -> pen*
 auto device::get_screen() -> screen*
 {
     return this->screen_device.get();
+}
+
+auto device::get_virtualkeyboard() -> virtualkeyboard*
+{
+    return this->virtualkeyboard_device.get();
 }
 
 } // namespace rmioc

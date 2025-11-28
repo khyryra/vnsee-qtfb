@@ -4,6 +4,7 @@
 #include "../rmioc/device.hpp"
 #include "../rmioc/pen.hpp"
 #include "../rmioc/touch.hpp"
+#include "../rmioc/virtualkeyboard.hpp"
 #include <algorithm>
 #include <bitset>
 #include <cerrno>
@@ -85,6 +86,20 @@ client::client(const char* ip, int port, rmioc::device& device)
         buttons_device.setup_poll(this->polled_fds[this->poll_buttons]);
     }
 
+    auto virtualkeyboard_callback = [this](int keyCode, bool down)
+    {
+        this->send_virtual_key_press(keyCode, down);
+    };
+
+    if (device.get_virtualkeyboard() != nullptr)
+    {
+        auto& virtualkeyboard_device = *device.get_virtualkeyboard();
+        this->virtualkeyboard_handler.emplace(virtualkeyboard_device, *this->screen_handler, virtualkeyboard_callback);
+        this->poll_virtualkeyboard = this->polled_fds.size();
+        this->polled_fds.push_back(pollfd{});
+        virtualkeyboard_device.setup_poll(this->polled_fds[this->poll_virtualkeyboard]);
+    }
+    
     auto button_callback = [this](int x, int y, MouseButton button)
     {
         this->send_button_press(x, y, button);
@@ -105,7 +120,7 @@ client::client(const char* ip, int port, rmioc::device& device)
     {
         auto& touch_device = *device.get_touch();
         this->touch_handler.emplace(
-            touch_device, screen_device,
+            touch_device, *this->screen_handler, screen_device,
             button_callback);
         this->poll_touch = this->polled_fds.size();
         this->polled_fds.push_back(pollfd{});
@@ -207,6 +222,13 @@ auto client::event_loop() -> bool
         {
             handle_status(this->touch_handler->process_events(inhibit));
         }
+
+        if (this->virtualkeyboard_handler.has_value()
+        // NOLINTNEXTLINE(hicpp-signed-bitwise): Use of C library
+                && (polled_fds[this->poll_virtualkeyboard].revents & POLLIN) != 0)
+        {
+            handle_status(this->virtualkeyboard_handler->process_events());
+        }
     }
 
     return true;
@@ -226,6 +248,16 @@ void client::send_button_press(
         << std::bitset<bits>(button_flag) << ")\n";
 
     SendPointerEvent(this->vnc_client, x, y, button_flag);
+}
+
+void client::send_virtual_key_press(
+    int keyCode, bool down
+)
+{
+    log::print("Virtual key press")
+        << keyCode << "\n";
+    
+    SendKeyEvent(this->vnc_client, keyCode, down);
 }
 
 } // namespace app

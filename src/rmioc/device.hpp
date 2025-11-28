@@ -5,6 +5,7 @@
 #include "flags.hpp"
 #include "pen.hpp"
 #include "screen.hpp"
+#include "virtualkeyboard.hpp"
 #include "touch.hpp"
 #include <boost/preprocessor/arithmetic/limits/dec_256.hpp>
 #include <boost/preprocessor/arithmetic/limits/inc_256.hpp>
@@ -28,7 +29,7 @@ namespace rmioc
 /** Devices that can be opened. */
 RMIOC_FLAGS_DEFINE(
     device_request,
-    buttons, touch, pen, screen
+    buttons, touch, pen, screen, virtualkeyboard
 );
 
 /**
@@ -72,13 +73,17 @@ public:
     /** Access the screen device, if possible. */
     screen* get_screen();
 
+    /** Access the virtual keyboard device, if possible. */
+    virtualkeyboard* get_virtualkeyboard();
+
 private:
     device(
         types type,
         std::unique_ptr<buttons>&& buttons_device,
         std::unique_ptr<touch>&& touch_device,
         std::unique_ptr<pen>&& pen_device,
-        std::unique_ptr<screen>&& screen_device
+        std::unique_ptr<screen>&& screen_device,
+        std::unique_ptr<virtualkeyboard>&& virtualkeyboard_device
     );
 
     types type;
@@ -86,6 +91,7 @@ private:
     std::unique_ptr<touch> touch_device;
     std::unique_ptr<pen> pen_device;
     std::unique_ptr<screen> screen_device;
+    std::unique_ptr<virtualkeyboard> virtualkeyboard_device;
 };
 
 } // namespace
