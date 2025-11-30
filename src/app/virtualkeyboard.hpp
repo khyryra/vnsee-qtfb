@@ -2,7 +2,6 @@
 #define APP_VIRTUALKEYBOARD_HPP
 
 #include "event_loop.hpp"
-#include "../rmioc/virtualkeyboard.hpp"
 
 namespace rmioc
 {
@@ -18,7 +17,6 @@ class virtualkeyboard
 {
 public:
     virtualkeyboard(
-        rmioc::virtualkeyboard& device,
         app::screen& screen,
         VirtualKeyboardCallback send_virtual_key_press
     );
@@ -26,16 +24,10 @@ public:
     /**
      * Process input from the software keyboard.
      */
-    event_loop_status process_events();
+    void handle_event(int type, int keyCode);
 
 private:
-    /** reMarkable keyboard device. */
-    rmioc::virtualkeyboard& device;
-
     app::screen& screen;
-
-    /** Previous keyboard state. */
-    rmioc::virtualkeyboard::virtualkeyboard_state previous_state;
 
     VirtualKeyboardCallback send_virtual_key_press;
 };

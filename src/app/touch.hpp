@@ -18,9 +18,7 @@ class touch
 {
 public:
     touch(
-        rmioc::touch& device,
         app::screen& screen,
-        const rmioc::screen& screen_device,
         MouseCallback send_button_press
     );
 
@@ -29,17 +27,11 @@ public:
      *
      * @param inhibit True to discard any event from the touchscreen.
      */
-    event_loop_status process_events(bool inhibit);
+    void handle_event(int type, int x, int y);
 
 private:
-    /** reMarkable touchscreen device. */
-    rmioc::touch& device;
-
     /** reMarkable screen. */
     app::screen& screen;
-
-    /** reMarkable screen device. */
-    const rmioc::screen& screen_device;
 
     /** Callback for sending mouse events. */
     MouseCallback send_button_press;

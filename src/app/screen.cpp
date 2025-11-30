@@ -1,5 +1,4 @@
 #include "screen.hpp"
-#include "event_loop.hpp"
 #include "../log.hpp"
 #include "../rmioc/screen.hpp"
 #include <algorithm>
@@ -24,25 +23,25 @@ screen::screen(rmioc::screen& device, rfbClient* vnc_client)
 , vnc_client(vnc_client)
 , repaint_mode(repaint_modes::standard)
 , standard_repaint_delay(500)
-, fast_repaint_delay(67) // 15 FPS
-, standard_waveform_mode(rmioc::waveform_modes::gl16)
-, fast_waveform_mode(rmioc::waveform_modes::a2)
+, fast_repaint_delay(50) // 15 FPS
+, standard_waveform_mode(REFRESH_MODE_UI)
+, fast_waveform_mode(REFRESH_MODE_ANIMATE)
 {
     char *env_waveform = std::getenv("VNSEE_WAVEFORM_MODE");
 
     if (env_waveform != NULL) {
         if (strcmp(env_waveform, "FASTEST") == 0) {
-            standard_repaint_delay = chrono::milliseconds(100);
-            standard_waveform_mode = rmioc::waveform_modes::a2;
+            standard_repaint_delay = chrono::milliseconds(50);
+            standard_waveform_mode = REFRESH_MODE_ANIMATE;
         } else if (strcmp(env_waveform, "FAST") == 0) {
             standard_repaint_delay = chrono::milliseconds(200);
-            standard_waveform_mode = rmioc::waveform_modes::du;
+            standard_waveform_mode = REFRESH_MODE_FAST;
         } else if (strcmp(env_waveform, "STANDARD") == 0) {
             standard_repaint_delay = chrono::milliseconds(500);
-            standard_waveform_mode = rmioc::waveform_modes::gl16;
+            standard_waveform_mode = REFRESH_MODE_UI;
         } else if (strcmp(env_waveform, "SLOW") == 0) {
             standard_repaint_delay = chrono::milliseconds(1000);
-            standard_waveform_mode = rmioc::waveform_modes::gc16;
+            standard_waveform_mode = REFRESH_MODE_CONTENT;
         }
     }
 
@@ -62,11 +61,45 @@ screen::screen(rmioc::screen& device, rfbClient* vnc_client)
     this->vnc_client->format.blueShift = this->device.get_blue_format().offset;
     this->vnc_client->format.blueMax = this->device.get_blue_format().max();
 
-    // Force the hextile encoding
-    this->vnc_client->appData.encodingsString = "hextile";
-    //this->vnc_client->appData.compressLevel = 9;
-    this->vnc_client->appData.enableJPEG = false;
-    //this->vnc_client->appData.qualityLevel = 0;
+    char *env_encoding = std::getenv("VNSEE_ENCODING");
+    if (env_encoding != NULL) {
+        if (strcmp(env_encoding, "RAW") == 0) {
+            this->vnc_client->appData.encodingsString = "raw";
+        } else if (strcmp(env_encoding, "COPYRECT") == 0) {
+            this->vnc_client->appData.encodingsString = "copyrect";
+        } else if (strcmp(env_encoding, "TIGHT") == 0) {
+            this->vnc_client->appData.encodingsString = "tight";
+            this->vnc_client->appData.compressLevel = 9;
+            this->vnc_client->appData.enableJPEG = true;
+            this->vnc_client->appData.qualityLevel = 0;
+        } else if (strcmp(env_encoding, "HEXTILE") == 0) {
+            this->vnc_client->appData.encodingsString = "hextile";
+        } else if (strcmp(env_encoding, "ZLIB") == 0) {
+            this->vnc_client->appData.encodingsString = "zlib";
+            this->vnc_client->appData.compressLevel = 9;
+        } else if (strcmp(env_encoding, "ZLIBHEX") == 0) {
+            this->vnc_client->appData.encodingsString = "zlibhex";
+            this->vnc_client->appData.compressLevel = 9;
+        } else if (strcmp(env_encoding, "TRLE") == 0) {
+            this->vnc_client->appData.encodingsString = "trle";
+        } else if (strcmp(env_encoding, "ZRLE") == 0) {
+            this->vnc_client->appData.encodingsString = "zrle";
+        } else if (strcmp(env_encoding, "ZYWRLE") == 0) {
+            this->vnc_client->appData.encodingsString = "zywrle";
+            this->vnc_client->appData.qualityLevel = 0;
+        } else if (strcmp(env_encoding, "ULTRA") == 0) {
+            this->vnc_client->appData.encodingsString = "ultra";
+        } else if (strcmp(env_encoding, "ULTRAZIP") == 0) {
+            this->vnc_client->appData.encodingsString = "ultrazip";
+        } else if (strcmp(env_encoding, "CORRE") == 0) {
+            this->vnc_client->appData.encodingsString = "corre";
+        } else if (strcmp(env_encoding, "RRE") == 0) {
+            this->vnc_client->appData.encodingsString = "rre";
+        }
+    } else {
+        this->vnc_client->appData.encodingsString = "copyrect";
+    }
+
     this->vnc_client->appData.useRemoteCursor = true;
     this->vnc_client->MallocFrameBuffer = screen::create_framebuf;
     this->vnc_client->GotFrameBufferUpdate = screen::commit_updates;

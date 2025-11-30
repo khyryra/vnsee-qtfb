@@ -144,9 +144,9 @@ private:
 
     chrono::milliseconds fast_repaint_delay;
 
-    rmioc::waveform_modes standard_waveform_mode;
+    int standard_waveform_mode;
 
-    rmioc::waveform_modes fast_waveform_mode;
+    int fast_waveform_mode;
 }; // class screen
 
 } // namespace app
