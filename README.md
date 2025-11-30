@@ -1,6 +1,6 @@
 # VNSee-QTFB
 
-[![reMarkable 1 is unsupported](https://img.shields.io/badge/rM1-unsupported-red)](https://remarkable.com/products/remarkable-1)
+[![reMarkable 1 is supported](https://img.shields.io/badge/rM1-supported-green)](https://remarkable.com/products/remarkable-1)
 [![reMarkable 2 is supported](https://img.shields.io/badge/rM2-supported-green)](https://remarkable.com/products/remarkable-2)
 [![reMarkable Paper Pro is supported](https://img.shields.io/badge/rMPP-supported-green)](https://remarkable.com/products/remarkable-paper/pro)
 [![reMarkable Paper Pro Move is supported](https://img.shields.io/badge/rMPPM-supported-green)](https://remarkable.com/products/remarkable-paper/pro-move)
@@ -20,6 +20,8 @@ This project is not affiliated with, nor endorsed by, [reMarkable AS](https://re
 4) Run `unzip vnsee-DEVICE.zip` from the device.
 5) Delete the zip archive.
 6) Refresh AppLoad.
+
+The VNC server resolution must match your device resolution.
 
 ## Technologies
 
