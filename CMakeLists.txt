@@ -85,3 +85,19 @@ target_include_directories(vnsee PRIVATE
 target_sources(vnsee PRIVATE
     vendor/rm-appload/backends/qtfb-clients/cpp/qtfb-client.cpp
 )
+
+file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/dist)
+
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/dist)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/dist/vnsee)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/dist/vnsee)
+
+set_target_properties(vnsee PROPERTIES
+                      RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/dist/vnsee
+                      RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/dist/vnsee
+)
+
+file(COPY ${CMAKE_SOURCE_DIR}/assets/vnsee-0 DESTINATION ${CMAKE_BINARY_DIR}/dist)
+file(COPY ${CMAKE_SOURCE_DIR}/assets/vnsee-1 DESTINATION ${CMAKE_BINARY_DIR}/dist)
+file(COPY ${CMAKE_SOURCE_DIR}/assets/vnsee-2 DESTINATION ${CMAKE_BINARY_DIR}/dist)
+file(COPY ${CMAKE_SOURCE_DIR}/assets/vnsee-3 DESTINATION ${CMAKE_BINARY_DIR}/dist)
