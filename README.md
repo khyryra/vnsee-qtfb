@@ -1,8 +1,8 @@
 # VNSee-QTFB
 
-[![reMarkable 1 is untested](https://img.shields.io/badge/rM1-untested-yellow)](https://remarkable.com/products/remarkable-1)
-[![reMarkable 2 is untested](https://img.shields.io/badge/rM2-untested-yellow)](https://remarkable.com/products/remarkable-2)
-[![reMarkable Paper Pro is untested](https://img.shields.io/badge/rMPP-untested-yellow)](https://remarkable.com/products/remarkable-paper/pro)
+[![reMarkable 1 is unsupported](https://img.shields.io/badge/rM1-unsupported-red)](https://remarkable.com/products/remarkable-1)
+[![reMarkable 2 is supported](https://img.shields.io/badge/rM2-supported-green)](https://remarkable.com/products/remarkable-2)
+[![reMarkable Paper Pro is supported](https://img.shields.io/badge/rMPP-supported-green)](https://remarkable.com/products/remarkable-paper/pro)
 [![reMarkable Paper Pro Move is supported](https://img.shields.io/badge/rMPPM-supported-green)](https://remarkable.com/products/remarkable-paper/pro-move)
 
 VNSee-QTFB is a [VNC](https://en.wikipedia.org/wiki/Virtual_Network_Computing) client for the [reMarkable tablet](https://remarkable.com) allowing you to use the device as a second screen or view a desktop environment running on your device. This is a fork of [VNSee](https://github.com/matteodelabre/vnsee) that has been ported to QTFB to enhance performance and compatibility, and has many new features and fixes.
