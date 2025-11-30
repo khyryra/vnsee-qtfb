@@ -34,7 +34,7 @@ Additional thanks to:
 - [asivery](https://github.com/asivery) for creating rm-appload and helping me port to QTFB.
 - [Noa Himesaka](https://github.com/NoaHimesaka1873) for helping me understand how QTFB works and testing on the reMarkable Paper Pro.
 - GreySim for testing on the reMarkable 1.
-- [notfrants](https://github.com/NotFrants) for testing on the reMarkable 2.
+- [notfrants](https://github.com/notfrants) for testing on the reMarkable 2.
 - [ingatellent](https://github.com/ingatellent) for inspiring me to port VNSee to QTFB.
 - The amazing community of the [reMarkable Discord Server](https://discord.gg/u3P9sDW) for helping me with my dumb mistakes and having faith in me.
 
